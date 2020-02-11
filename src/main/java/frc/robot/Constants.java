@@ -21,6 +21,7 @@ public final class Constants {
     public static final int MOTOR_LEFT_2_ID = 4;
     public static final int MOTOR_RIGHT_1_ID = 1;
     public static final int MOTOR_RIGHT_2_ID = 3;
+    public static final int MOTOR_TURRET_TURN_ID = 10;
 
     // Speed controller groups.
     public static final boolean LEFT_MOTORS_INVERTED = false;
@@ -28,6 +29,7 @@ public final class Constants {
 
     // Auto drive.
     public static final double AUTO_DRIVE_SPEED = 0.8;
+    public static final double AUTO_DRIVE_SLOW_SPEED = 0.4;
     public static final double MOTOR_DELAY_STOP = 0.1;
     public static final double AUTO_TURN_SPEED = 0.5;
     public static final double AUTO_STOP_DELAY_SECONDS = 0.5;
@@ -39,4 +41,12 @@ public final class Constants {
     // Gyro.
     public static final double GYRO_CYCLE_TIME = 0.02;
     public static final int ENCODER_VALUE_PER_FOOT = 2440;
+
+    // Limelight.
+    public static final double LIMELIGHT_X_FORGIVENESS = 0.01;
+    public static final double LIMELIGHT_X_CLOSE = 2;
+    public static final double LIMELIGHT_X_CLOSE_TURN_SPEED = 0.3;
+    public static final double LIMELIGHT_FOLLOW_SPEED = 0.5;
+    public static final double LIMELIGHT_FOCAL_LENGTH = 2.9272791257541;
+    public static final double K = 4 * Math.sqrt(8.75);
 }

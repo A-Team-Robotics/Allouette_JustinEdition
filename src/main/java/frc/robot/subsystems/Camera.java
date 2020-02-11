@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -27,7 +28,7 @@ public class Camera extends SubsystemBase {
   public Camera() {
   }
 
-  public Camera getCamera() {
+  public static Camera getCamera() {
     if(camera == null) {
       camera = new Camera();
     }
@@ -47,14 +48,16 @@ public class Camera extends SubsystemBase {
   }
 
   public double getObjectDistance() {
-    double distance = 0;
+    /*
     if(area == 2.23) {
       distance = 92;
     }
     else {
-      
+      distance = 5;
     }
-    return 0;
+    */
+    System.out.println(Constants.K / Math.sqrt(getArea()));
+    return Constants.K / Math.sqrt(getArea());
   }
 
   @Override

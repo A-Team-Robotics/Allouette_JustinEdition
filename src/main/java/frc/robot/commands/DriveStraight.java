@@ -39,10 +39,21 @@ public class DriveStraight extends CommandBase {
   public void execute() {
     if(Math.abs(drive.getDistance(false)) <= Math.abs(distance / 2)) {
       if(distance < 0) {
+        if(distance <= 10) {
+          drive.autoDrive(-Constants.AUTO_DRIVE_SLOW_SPEED, 0);
+        }
+        else {
+          drive.autoDrive(-Constants.AUTO_DRIVE_SPEED, 0);
+        }
         drive.autoDrive(-Constants.AUTO_DRIVE_SPEED, 0);
       }
       else {
-        drive.autoDrive(Constants.AUTO_DRIVE_SPEED, 0);
+        if(distance <= 10) {
+          drive.autoDrive(Constants.AUTO_DRIVE_SLOW_SPEED, 0);
+        }
+        else {
+          drive.autoDrive(Constants.AUTO_DRIVE_SPEED, 0);
+        }
       }
     }
   }

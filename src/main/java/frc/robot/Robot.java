@@ -30,7 +30,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   public static DriveTrain driveTrain;
   private AutonomousDriving autoDrive;
-  private Camera limelight;
+  public static Camera limelight;
+  public static Turret turret;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -43,6 +44,8 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
     driveTrain = DriveTrain.getDriveTrain();
     limelight = new Camera();
+    turret = Turret.getTurret();
+
     if (driveTrain == null){
       System.out.println("Drive train is null.");
     }
@@ -116,6 +119,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     driveTrain.manualDrive(m_oi.getControllerInstant());
+    turret.turnTurret(m_oi.getControllerInstant());
   }
 
   @Override
