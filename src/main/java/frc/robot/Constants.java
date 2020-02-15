@@ -48,6 +48,8 @@ public final class Constants {
     public static final String COLOR_GREEN = "Green";
     public static final String COLOR_BLUE = "Blue";
     public static final String COLOR_UNKNOWN = "Unknown";
+    public static final String COLOR_NODETECT = "None Detected";
+    public static final int COLOR_CLOSEST_PROXIMITY = 150; // Maximum distance is about 105 - 110.
 
     // Auto drive.
     public static final double AUTO_DRIVE_SPEED = 0.8;

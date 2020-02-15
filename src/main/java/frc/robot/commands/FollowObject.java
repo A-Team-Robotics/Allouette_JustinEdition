@@ -95,6 +95,10 @@ public class FollowObject extends CommandBase {
     if(camera.getObjectDistance() <= distanceToObject) {
       return true;
     }
+
+    if(camera.getArea() <= 0.38) {
+      return true;
+    }
     
     if(Robot.cancelSeekAndFollow) {
       return true;

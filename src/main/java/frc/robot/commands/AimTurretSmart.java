@@ -13,14 +13,15 @@ import frc.robot.Robot;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Turret;
 
-public class AimTurret extends CommandBase {
+public class AimTurretSmart extends CommandBase {
   private Camera camera;
   private Turret turret;
   private double x;
+  private double lastx;
   /**
    * Creates a new AimTurret.
    */
-  public AimTurret() {
+  public AimTurretSmart() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Robot.turret, Robot.limelight);
     turret = Turret.getTurret();
@@ -43,11 +44,20 @@ public class AimTurret extends CommandBase {
       else {
         turret.turn(Constants.TURRET_AIM_SPEED);
       }
-      
+      lastx = x;
     }
     else if(x < 0) {
       if(x >= -Constants.TURRET_AIM_CLOSE) {
         turret.turn(-Constants.TURRET_AIM_SPEED_SLOW);
+      }
+      else {
+        turret.turn(-Constants.TURRET_AIM_SPEED);
+      }
+      lastx = x;
+    }
+    else {
+      if(lastx > 0) {
+        turret.turn(Constants.TURRET_AIM_SPEED);
       }
       else {
         turret.turn(-Constants.TURRET_AIM_SPEED);
@@ -65,7 +75,9 @@ public class AimTurret extends CommandBase {
   @Override
   public boolean isFinished() {
     if(x > -Constants.LIMELIGHT_X_TURRET_FORGIVENESS && x < Constants.LIMELIGHT_X_TURRET_FORGIVENESS) {
-      return true;
+      if(camera.getArea() != 0) {
+        return true;
+      }
     }
     if(!Robot.isSeekingTurret) {
       return true;

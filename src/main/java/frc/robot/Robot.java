@@ -36,6 +36,7 @@ public class Robot extends TimedRobot {
   public static boolean isSeeking;
   public static boolean isFollowing;
   public static boolean cancelSeekAndFollow;
+  public static boolean isSeekingTurret;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -153,12 +154,17 @@ public class Robot extends TimedRobot {
       cancelSeekAndFollow = true;
     }
     
-    if(m_oi.getControllerInstant().getAButton()) {
-      new AimTurret().schedule();
+    if(m_oi.getControllerInstant().getAButtonPressed()) {
+      // new AimTurret().schedule();
+      if(isSeekingTurret) isSeekingTurret = false;
+      else isSeekingTurret = true;
     }
     if(m_oi.getControllerInstant().getBButton()) {
       turret.center();
     }
+
+    if(isSeekingTurret) new Target_TurretFollow().schedule();
+    
   }
 
   @Override
