@@ -7,18 +7,24 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.subsystems.Camera;
+import frc.robot.subsystems.Turret;
 
-public class Wait extends CommandBase {
-  
-  private double time;
+public class AimTurret extends CommandBase {
+  private Camera camera;
+  private Turret turret;
+  private double x;
   /**
-   * Creates a new Wait.
+   * Creates a new AimTurret.
    */
-  public Wait(double timeInSeconds) {
+  public AimTurret() {
     // Use addRequirements() here to declare subsystem dependencies.
-    time = timeInSeconds;
+    addRequirements(Robot.turret, Robot.limelight);
+    turret = Turret.getTurret();
+    camera = Camera.getCamera();
   }
 
   // Called when the command is initially scheduled.
@@ -29,18 +35,38 @@ public class Wait extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    x = camera.getX();
+    if(x > 0) {
+      if(x <= Constants.TURRET_AIM_CLOSE) {
+        turret.turn(Constants.TURRET_AIM_SPEED_SLOW);
+      }
+      else {
+        turret.turn(Constants.TURRET_AIM_SPEED);
+      }
+      
+    }
+    else if(x < 0) {
+      if(x >= -Constants.TURRET_AIM_CLOSE) {
+        turret.turn(-Constants.TURRET_AIM_SPEED_SLOW);
+      }
+      else {
+        turret.turn(-Constants.TURRET_AIM_SPEED);
+      }
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Timer.delay(time);
-    System.out.println("Done waiting.");
+    turret.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    if(x > -Constants.LIMELIGHT_X_TURRET_FORGIVENESS && x < Constants.LIMELIGHT_X_TURRET_FORGIVENESS) {
+      return true;
+    }
+    return false;
   }
 }

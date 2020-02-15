@@ -13,14 +13,13 @@ import frc.robot.commands.*;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutonomousDriving extends SequentialCommandGroup {
+public class SeekAndFollow extends SequentialCommandGroup {
   /**
-   * Creates a new AutonomousDriving.
+   * Creates a new SeekAndFollow.
    */
-  public AutonomousDriving() {
+  public SeekAndFollow(int direction) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    // super(new DriveStraight(-30), new TurnAngle(-50), new DriveStraight(-10), new TurnAngle(-180), new DriveStraight(-20), new DriveStraight(10));
-    super(new FollowObject(4));
+    super(new SeekTarget(direction), new CenterToTarget());
   }
 }

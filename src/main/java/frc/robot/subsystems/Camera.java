@@ -16,6 +16,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Camera extends SubsystemBase {
   private static Camera camera;
+  private NetworkTable table;
   private NetworkTableEntry tx;
   private NetworkTableEntry ty;
   private NetworkTableEntry ta;
@@ -56,18 +57,20 @@ public class Camera extends SubsystemBase {
       distance = 5;
     }
     */
-    System.out.println(Constants.K / Math.sqrt(getArea()));
     return Constants.K / Math.sqrt(getArea());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    // NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    if(table == null) {
+      setTable();
+    }
     tx = table.getEntry("tx");
     ty = table.getEntry("ty");
     ta = table.getEntry("ta");
-
+  
     //read values periodically
     x = tx.getDouble(0.0);
     y = ty.getDouble(0.0);
@@ -77,5 +80,16 @@ public class Camera extends SubsystemBase {
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
+  }
+
+  public void setTable() {
+    table = NetworkTableInstance.getDefault().getTable("limelight");
+  }
+
+  public void setPipeline(int pipelineNumber){
+    if(table == null) {
+      setTable();
+    }
+    table.getEntry("pipeline").setNumber(pipelineNumber);
   }
 }

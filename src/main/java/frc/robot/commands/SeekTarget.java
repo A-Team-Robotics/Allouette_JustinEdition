@@ -7,18 +7,28 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.subsystems.Camera;
+import frc.robot.subsystems.DriveTrain;
 
-public class Wait extends CommandBase {
-  
-  private double time;
+public class SeekTarget extends CommandBase {
+  private DriveTrain drive;
+  private Camera camera;
+  private XboxController controller;
+  private int turn;
   /**
-   * Creates a new Wait.
+   * Creates a new SeekTarget.
    */
-  public Wait(double timeInSeconds) {
+  public SeekTarget(int spinDirection) {
     // Use addRequirements() here to declare subsystem dependencies.
-    time = timeInSeconds;
+    addRequirements(Robot.driveTrain, Robot.limelight);
+    drive = DriveTrain.getDriveTrain();
+    camera = Camera.getCamera();
+
+    turn = spinDirection;
   }
 
   // Called when the command is initially scheduled.
@@ -29,18 +39,31 @@ public class Wait extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    drive.autoDrive(0, Constants.LIMELIGHT_SEEK_SPEED * turn);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Timer.delay(time);
-    System.out.println("Done waiting.");
+    Robot.isSeeking = false;
+    System.out.println("Seek done.");
+    drive.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    if(turn == 0) {
+      return true; // No turning, so command is cancelled.
+    }
+
+    if(camera.getArea() != 0) {
+      return true;
+    }
+
+    if(Robot.cancelSeekAndFollow) {
+      return true;
+    }
+    return false;
   }
 }

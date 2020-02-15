@@ -15,7 +15,7 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.commandGroups.*;
-// import frc.robot.commands.*;
+import frc.robot.commands.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -32,6 +32,9 @@ public class Robot extends TimedRobot {
   private AutonomousDriving autoDrive;
   public static Camera limelight;
   public static Turret turret;
+  public static boolean isSeeking;
+  public static boolean isFollowing;
+  public static boolean cancelSeekAndFollow;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -43,8 +46,9 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_oi = new OI();
     driveTrain = DriveTrain.getDriveTrain();
-    limelight = new Camera();
+    limelight = Camera.getCamera();
     turret = Turret.getTurret();
+    cancelSeekAndFollow = false;
 
     if (driveTrain == null){
       System.out.println("Drive train is null.");
@@ -108,6 +112,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -120,6 +125,38 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     driveTrain.manualDrive(m_oi.getControllerInstant());
     turret.turnTurret(m_oi.getControllerInstant());
+
+    if(m_oi.getControllerInstant().getPOV() > 0 && m_oi.getControllerInstant().getPOV() < 180) {
+      if(!isSeeking) {
+        isSeeking = true;
+        cancelSeekAndFollow = false;
+        new SeekAndFollow(1).schedule();
+      }
+    }
+    else if(m_oi.getControllerInstant().getPOV() > 180 && m_oi.getControllerInstant().getPOV() < 360) {
+      if(!isSeeking) {
+        isSeeking = true;
+        cancelSeekAndFollow = false;
+        new SeekAndFollow(-1).schedule();
+      }
+    }
+    else if(m_oi.getControllerInstant().getPOV() == 0) {
+      if(!isFollowing) {
+        isFollowing = true;
+        cancelSeekAndFollow = false;
+        new FollowObject(4).schedule();
+      }
+    }
+    else if(m_oi.getControllerInstant().getPOV() == 180) {
+      cancelSeekAndFollow = true;
+    }
+    
+    if(m_oi.getControllerInstant().getAButton()) {
+      new AimTurret().schedule();
+    }
+    if(m_oi.getControllerInstant().getBButton()) {
+      turret.center();
+    }
   }
 
   @Override

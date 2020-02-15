@@ -13,89 +13,50 @@ import frc.robot.subsystems.Camera;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
-public class FollowObject extends CommandBase {
+public class CenterToTarget extends CommandBase {
   private DriveTrain drive;
   private Camera camera;
   private double x;
-  private double distance;
-  private double distanceToObject;
-  private double moveSpeed;
-  private double closeDistance;
   /**
-   * Creates a new FollowObject.
+   * Creates a new CenterToTarget.
    */
-  public FollowObject(double distanceToObjectInFeet) {
+  public CenterToTarget() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Robot.driveTrain, Robot.limelight);
     drive = DriveTrain.getDriveTrain();
     camera = Camera.getCamera();
-    distanceToObject = distanceToObjectInFeet;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    distance = camera.getObjectDistance();
-
-    // Get the distance to cut power based on how far the robot must drive initially.
-    if(distance <= distanceToObject + 3) {
-      closeDistance = distanceToObject + 0.5;
-    }
-    else if(distance <= distanceToObject + 1) {
-      closeDistance = distanceToObject + 0.25;
-    }
-    else {
-      closeDistance = distanceToObject + 1;
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     x = camera.getX();
-    distance = camera.getObjectDistance();
-    moveSpeed = Constants.LIMELIGHT_FOLLOW_SPEED;
-    
-    if(distance <= closeDistance) {
-      moveSpeed *= 0.5 * (distance / (closeDistance + 0.5));
-    }
-    else if(distance >= 10) {
-      moveSpeed = Constants.LIMELIGHT_FAST_FOLLOW_SPEED;
-    }
-
     if(x > 0) {
-      if(x <= Constants.LIMELIGHT_X_CLOSE) {
-        drive.autoDrive(moveSpeed, Constants.LIMELIGHT_X_CLOSE_TURN_SPEED);
-      }
-      else {
-        drive.autoDrive(moveSpeed, Constants.AUTO_TURN_SPEED);
-      }
+      drive.autoDrive(0, Constants.LIMELIGHT_X_CENTER_SPEED);
     }
     else if(x < 0) {
-      if(Math.abs(x) <= Constants.LIMELIGHT_X_CLOSE) {
-        drive.autoDrive(moveSpeed, -Constants.LIMELIGHT_X_CLOSE_TURN_SPEED);
-      }
-      else {
-        drive.autoDrive(moveSpeed, -Constants.AUTO_TURN_SPEED);
-      }
+      drive.autoDrive(0, -Constants.LIMELIGHT_X_CENTER_SPEED);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Robot.isFollowing = false;
     drive.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
-    if(camera.getObjectDistance() <= distanceToObject) {
+    if(x >= -Constants.LIMELIGHT_X_FORGIVENESS && x <= Constants.LIMELIGHT_X_FORGIVENESS) {
       return true;
     }
-    
+
     if(Robot.cancelSeekAndFollow) {
       return true;
     }
