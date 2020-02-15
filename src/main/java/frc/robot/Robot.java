@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
   private AutonomousDriving autoDrive;
   public static Camera limelight;
   public static Turret turret;
+  public static ColorSensor colorSensor;
   public static boolean isSeeking;
   public static boolean isFollowing;
   public static boolean cancelSeekAndFollow;
@@ -48,6 +49,7 @@ public class Robot extends TimedRobot {
     driveTrain = DriveTrain.getDriveTrain();
     limelight = Camera.getCamera();
     turret = Turret.getTurret();
+    colorSensor = ColorSensor.getColorSensor();
     cancelSeekAndFollow = false;
 
     if (driveTrain == null){

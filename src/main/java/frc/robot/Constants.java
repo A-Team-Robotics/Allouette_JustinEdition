@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.I2C;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -41,11 +39,15 @@ public final class Constants {
     public static final boolean RIGHT_MOTORS_INVERTED = false;
 
     // Color Sensor.
-    public static final I2C.Port i2cPort = I2C.Port.kOnboard;
     public static final double[] RGB_RED = {0.561, 0.232, 0.114};
     public static final double[] RGB_YELLOW = {0.361, 0.524, 0.113};
     public static final double[] RGB_GREEN = {0.197, 0.561, 0.240};
     public static final double[] RGB_BLUE = {0.143, 0.427, 0.429};
+    public static final String COLOR_RED = "Red";
+    public static final String COLOR_YELLOW = "Yellow";
+    public static final String COLOR_GREEN = "Green";
+    public static final String COLOR_BLUE = "Blue";
+    public static final String COLOR_UNKNOWN = "Unknown";
 
     // Auto drive.
     public static final double AUTO_DRIVE_SPEED = 0.8;
