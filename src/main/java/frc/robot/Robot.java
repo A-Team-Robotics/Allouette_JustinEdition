@@ -157,7 +157,10 @@ public class Robot extends TimedRobot {
     if(m_oi.getControllerInstant().getAButtonPressed()) {
       // new AimTurret().schedule();
       if(isSeekingTurret) isSeekingTurret = false;
-      else isSeekingTurret = true;
+      else {
+        Constants.lastx = 0;
+        isSeekingTurret = true;
+      }
     }
     if(m_oi.getControllerInstant().getBButton()) {
       turret.center();

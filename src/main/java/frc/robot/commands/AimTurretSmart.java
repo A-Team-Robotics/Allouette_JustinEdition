@@ -31,6 +31,7 @@ public class AimTurretSmart extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    lastx = Constants.lastx;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,7 +45,6 @@ public class AimTurretSmart extends CommandBase {
       else {
         turret.turn(Constants.TURRET_AIM_SPEED);
       }
-      lastx = x;
     }
     else if(x < 0) {
       if(x >= -Constants.TURRET_AIM_CLOSE) {
@@ -53,7 +53,6 @@ public class AimTurretSmart extends CommandBase {
       else {
         turret.turn(-Constants.TURRET_AIM_SPEED);
       }
-      lastx = x;
     }
     else {
       if(lastx > 0) {
@@ -62,6 +61,11 @@ public class AimTurretSmart extends CommandBase {
       else {
         turret.turn(-Constants.TURRET_AIM_SPEED);
       }
+    }
+
+    if(x <= -Constants.LIMELIGHT_X_TURRET_FORGIVENESS || x >= Constants.LIMELIGHT_X_TURRET_FORGIVENESS) {
+      lastx = x;
+      Constants.lastx = x;
     }
   }
 

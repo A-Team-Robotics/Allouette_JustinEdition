@@ -39,13 +39,13 @@ public class FollowObject extends CommandBase {
 
     // Get the distance to cut power based on how far the robot must drive initially.
     if(distance <= distanceToObject + 3) {
-      closeDistance = distanceToObject + 0.5;
+      closeDistance = distanceToObject + 1.5;
     }
     else if(distance <= distanceToObject + 1) {
-      closeDistance = distanceToObject + 0.25;
+      closeDistance = distanceToObject + 0.5;
     }
     else {
-      closeDistance = distanceToObject + 1;
+      closeDistance = distanceToObject + 2;
     }
   }
 
@@ -57,7 +57,7 @@ public class FollowObject extends CommandBase {
     moveSpeed = Constants.LIMELIGHT_FOLLOW_SPEED;
     
     if(distance <= closeDistance) {
-      moveSpeed *= 0.5 * (distance / (closeDistance + 0.5));
+      moveSpeed = Constants.LIMELIGHT_SLOW_FOLLOW_SPEED;
     }
     else if(distance >= 10) {
       moveSpeed = Constants.LIMELIGHT_FAST_FOLLOW_SPEED;
@@ -84,8 +84,34 @@ public class FollowObject extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("Follow ended.");
     Robot.isFollowing = false;
     drive.stop();
+    if(!Robot.cancelSeekAndFollow) {
+      System.out.println("Cancel false.");
+      distance = camera.getObjectDistance();
+      do {
+        distance = camera.getObjectDistance();
+        System.out.println("Distance is.... " + distance);
+        x = camera.getX();
+
+        if(x > 0) {
+          drive.autoDrive(-Constants.LIMELIGHT_SLOW_FOLLOW_SPEED, Constants.LIMELIGHT_X_CLOSE_TURN_SPEED);
+        }
+        else if(x < 0) {
+          drive.autoDrive(-Constants.LIMELIGHT_SLOW_FOLLOW_SPEED, -Constants.LIMELIGHT_X_CLOSE_TURN_SPEED);
+        }
+        else {
+          drive.autoDrive(-Constants.LIMELIGHT_SLOW_FOLLOW_SPEED, 0);
+        }
+
+        if(Robot.cancelSeekAndFollow) {
+          break;
+        }
+      } while(distance < distanceToObject);
+    }
+    drive.stop();
+    System.out.println("All stop.");
   }
 
   // Returns true when the command should end.

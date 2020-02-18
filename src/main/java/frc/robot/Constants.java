@@ -29,10 +29,11 @@ public final class Constants {
     public static final double TURRET_SPIN_SPEED = 0.6;
     public static final int TURRET_LEFT_LIMIT = 6;
     public static final int TURRET_RIGHT_LIMIT = 4;
-    public static final double TURRET_AIM_SPEED = 0.4;
+    public static final double TURRET_AIM_SPEED = 0.5;
     public static final double TURRET_AIM_SPEED_SLOW = 0.15;
     public static final double TURRET_AIM_CLOSE = 7.0;
     public static final double TURRET_SPAN = -4422 + 3348;
+    public static double lastx;
 
     // Speed controller groups.
     public static final boolean LEFT_MOTORS_INVERTED = false;
@@ -73,8 +74,9 @@ public final class Constants {
     public static final double LIMELIGHT_X_CLOSE = 2;
     public static final double LIMELIGHT_X_CLOSE_TURN_SPEED = 0.35;
     public static final double LIMELIGHT_X_CENTER_SPEED = 0.45;
-    public static final double LIMELIGHT_FOLLOW_SPEED = 0.5;
-    public static final double LIMELIGHT_FAST_FOLLOW_SPEED = 0.6;
+    public static final double LIMELIGHT_FOLLOW_SPEED = 0.55;
+    public static final double LIMELIGHT_FAST_FOLLOW_SPEED = 0.65;
+    public static final double LIMELIGHT_SLOW_FOLLOW_SPEED = 0.45;
     public static final double LIMELIGHT_FOCAL_LENGTH = 2.9272791257541;
     public static final double LIMELIGHT_SEEK_SPEED = 0.6;
     public static final double K = 4 * Math.sqrt(8.75);
