@@ -45,7 +45,6 @@ public class DriveStraight extends CommandBase {
         else {
           drive.autoDrive(-Constants.AUTO_DRIVE_SPEED, 0);
         }
-        drive.autoDrive(-Constants.AUTO_DRIVE_SPEED, 0);
       }
       else {
         if(distance <= 10) {

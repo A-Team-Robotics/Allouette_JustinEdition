@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import java.text.DecimalFormat;
 
 public class Camera extends SubsystemBase {
   private static Camera camera;
@@ -23,10 +24,12 @@ public class Camera extends SubsystemBase {
   private double x;
   private double y;
   private double area;
+  private DecimalFormat df;
   /**
    * Creates a new Camera.
    */
   public Camera() {
+    df = new DecimalFormat("####.##");
   }
 
   public static Camera getCamera() {
@@ -57,6 +60,7 @@ public class Camera extends SubsystemBase {
       distance = 5;
     }
     */
+    // return Double.parseDouble(df.format(Constants.K / Math.sqrt(getArea())));
     return Constants.K / Math.sqrt(getArea());
   }
 
@@ -80,6 +84,7 @@ public class Camera extends SubsystemBase {
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
     SmartDashboard.putNumber("LimelightArea", area);
+    SmartDashboard.putNumber("Distance", getObjectDistance());
   }
 
   public void setTable() {

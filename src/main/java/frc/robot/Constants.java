@@ -53,10 +53,10 @@ public final class Constants {
     public static final int COLOR_CLOSEST_PROXIMITY = 150; // Maximum distance is about 105 - 110.
 
     // Auto drive.
-    public static final double AUTO_DRIVE_SPEED = 0.8;
-    public static final double AUTO_DRIVE_SLOW_SPEED = 0.4;
+    public static final double AUTO_DRIVE_SPEED = 0.9;
+    public static final double AUTO_DRIVE_SLOW_SPEED = 0.55;
     public static final double MOTOR_DELAY_STOP = 0.1;
-    public static final double AUTO_TURN_SPEED = 0.5;
+    public static final double AUTO_TURN_SPEED = 0.7;
     public static final double AUTO_STOP_DELAY_SECONDS = 0.5;
     
     // Controllers.
@@ -72,12 +72,15 @@ public final class Constants {
     public static final double LIMELIGHT_X_FORGIVENESS = 0.1;
     public static final double LIMELIGHT_X_TURRET_FORGIVENESS = 0.5;
     public static final double LIMELIGHT_X_CLOSE = 2;
-    public static final double LIMELIGHT_X_CLOSE_TURN_SPEED = 0.35;
-    public static final double LIMELIGHT_X_CENTER_SPEED = 0.45;
+    public static final double LIMELIGHT_X_CLOSE_TURN_SPEED = 0.45;
+    public static final double LIMELIGHT_X_CENTER_SPEED = 0.51;
     public static final double LIMELIGHT_FOLLOW_SPEED = 0.55;
     public static final double LIMELIGHT_FAST_FOLLOW_SPEED = 0.65;
-    public static final double LIMELIGHT_SLOW_FOLLOW_SPEED = 0.45;
+    public static final double LIMELIGHT_SLOW_FOLLOW_SPEED = 0.5;
+    public static final double LIMELIGHT_SLOTH_FOLLOW_SPEED = 0.46;
     public static final double LIMELIGHT_FOCAL_LENGTH = 2.9272791257541;
     public static final double LIMELIGHT_SEEK_SPEED = 0.6;
-    public static final double K = 4 * Math.sqrt(8.75);
+    public static final double LIMELIGHT_DISTANCE_ACCEPTABLE = 0.01;
+    public static final double LIMELIGHT_MINIMUM_VIEWABLE_AREA = 0.38;
+    public static final double K = 14.666666666666667 * Math.sqrt(1.723);
 }

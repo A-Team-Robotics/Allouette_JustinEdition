@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commandGroups.*;
 import frc.robot.commands.*;
 
@@ -73,7 +74,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    
   }
 
   /**
@@ -126,6 +126,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    SmartDashboard.putBoolean("Turret Follow", isSeekingTurret);
     driveTrain.manualDrive(m_oi.getControllerInstant());
     turret.turnTurret(m_oi.getControllerInstant());
 
@@ -147,7 +148,6 @@ public class Robot extends TimedRobot {
       if(!isFollowing) {
         isFollowing = true;
         cancelSeekAndFollow = false;
-        new FollowObject(4).schedule();
       }
     }
     else if(m_oi.getControllerInstant().getPOV() == 180) {
@@ -167,7 +167,7 @@ public class Robot extends TimedRobot {
     }
 
     if(isSeekingTurret) new Target_TurretFollow().schedule();
-    
+    if(isFollowing) new FollowObject(10).schedule();
   }
 
   @Override

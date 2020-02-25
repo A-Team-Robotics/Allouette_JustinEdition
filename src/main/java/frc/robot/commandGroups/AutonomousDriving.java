@@ -20,7 +20,7 @@ public class AutonomousDriving extends SequentialCommandGroup {
   public AutonomousDriving() {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    // super(new DriveStraight(-30), new TurnAngle(-50), new DriveStraight(-10), new TurnAngle(-180), new DriveStraight(-20), new DriveStraight(10));
-    super(new FollowObject(4));
+    super(new DriveStraight(-30), new TurnAngle(-50), new DriveStraight(-10), new TurnAngle(-180), new DriveStraight(-20), new DriveStraight(10));
+    // super(new FollowObject(4));
   }
 }

@@ -20,7 +20,9 @@ public class FollowObject extends CommandBase {
   private double distance;
   private double distanceToObject;
   private double moveSpeed;
-  private double closeDistance;
+  private double close;
+  private boolean driveForward;
+  private int count;
   /**
    * Creates a new FollowObject.
    */
@@ -35,17 +37,25 @@ public class FollowObject extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    count = 0;
     distance = camera.getObjectDistance();
 
     // Get the distance to cut power based on how far the robot must drive initially.
-    if(distance <= distanceToObject + 3) {
-      closeDistance = distanceToObject + 1.5;
+    if(distance > distanceToObject) {
+      driveForward = true;
     }
-    else if(distance <= distanceToObject + 1) {
-      closeDistance = distanceToObject + 0.5;
+    else if(distance < distanceToObject) {
+      driveForward = false;
+    }
+
+    if(distance >= (distanceToObject - 3) && distance <= (distanceToObject + 3)) {
+      close = 1.5;
+    }
+    else if(distance >= (distanceToObject - 1) && distance <= (distanceToObject + 1)) {
+      close = 0.5;
     }
     else {
-      closeDistance = distanceToObject + 2;
+      close = 2;
     }
   }
 
@@ -56,11 +66,23 @@ public class FollowObject extends CommandBase {
     distance = camera.getObjectDistance();
     moveSpeed = Constants.LIMELIGHT_FOLLOW_SPEED;
     
-    if(distance <= closeDistance) {
+    if(distance >= (distanceToObject - close) && distance <= (distanceToObject + close)) {
       moveSpeed = Constants.LIMELIGHT_SLOW_FOLLOW_SPEED;
     }
-    else if(distance >= 10) {
-      moveSpeed = Constants.LIMELIGHT_FAST_FOLLOW_SPEED;
+
+    if(distance >= (distanceToObject - 0.09) && distance <= (distanceToObject + 0.09)) {
+      moveSpeed = Constants.LIMELIGHT_SLOTH_FOLLOW_SPEED;
+    }
+
+    if(distance > distanceToObject) {
+      driveForward = true;
+    }
+    else if(distance < distanceToObject) {
+      driveForward = false;
+    }
+
+    if(!driveForward) {
+      moveSpeed *= -1;
     }
 
     if(x > 0) {
@@ -79,50 +101,33 @@ public class FollowObject extends CommandBase {
         drive.autoDrive(moveSpeed, -Constants.AUTO_TURN_SPEED);
       }
     }
+    else {
+      drive.autoDrive(moveSpeed, 0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Follow ended.");
     Robot.isFollowing = false;
     drive.stop();
-    if(!Robot.cancelSeekAndFollow) {
-      System.out.println("Cancel false.");
-      distance = camera.getObjectDistance();
-      do {
-        distance = camera.getObjectDistance();
-        System.out.println("Distance is.... " + distance);
-        x = camera.getX();
-
-        if(x > 0) {
-          drive.autoDrive(-Constants.LIMELIGHT_SLOW_FOLLOW_SPEED, Constants.LIMELIGHT_X_CLOSE_TURN_SPEED);
-        }
-        else if(x < 0) {
-          drive.autoDrive(-Constants.LIMELIGHT_SLOW_FOLLOW_SPEED, -Constants.LIMELIGHT_X_CLOSE_TURN_SPEED);
-        }
-        else {
-          drive.autoDrive(-Constants.LIMELIGHT_SLOW_FOLLOW_SPEED, 0);
-        }
-
-        if(Robot.cancelSeekAndFollow) {
-          break;
-        }
-      } while(distance < distanceToObject);
-    }
-    drive.stop();
-    System.out.println("All stop.");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
 
-    if(camera.getObjectDistance() <= distanceToObject) {
-      return true;
+    if(camera.getObjectDistance() >= (distanceToObject - Constants.LIMELIGHT_DISTANCE_ACCEPTABLE) && camera.getObjectDistance() <= (distanceToObject + Constants.LIMELIGHT_DISTANCE_ACCEPTABLE)) {
+      count++;
+      if(count >= 3) {
+        return true;
+      }
+    }
+    else {
+      count = 0;
     }
 
-    if(camera.getArea() <= 0.38) {
+    if(camera.getArea() <= Constants.LIMELIGHT_MINIMUM_VIEWABLE_AREA) {
       return true;
     }
     

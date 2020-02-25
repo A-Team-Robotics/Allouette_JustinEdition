@@ -79,7 +79,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void manualDrive(XboxController controller) {
-    drive.arcadeDrive(controller.getY() * -1, controller.getX());
+    drive.arcadeDrive(controller.getRawAxis(1) * -1, controller.getX());
   }
 
   public double getVelocity() {
