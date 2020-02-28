@@ -88,7 +88,12 @@ public class Camera extends SubsystemBase {
   }
 
   public void setTable() {
-    table = NetworkTableInstance.getDefault().getTable("limelight");
+    try {
+      table = NetworkTableInstance.getDefault().getTable("limelight");
+    }
+    catch(Exception e) {
+      System.out.println("Unable to get limelight network table.");
+    }
   }
 
   public void setPipeline(int pipelineNumber){
@@ -96,5 +101,19 @@ public class Camera extends SubsystemBase {
       setTable();
     }
     table.getEntry("pipeline").setNumber(pipelineNumber);
+  }
+
+  public void turnOffLED() {
+    if(table == null) {
+      setTable();
+    }
+    table.getEntry("ledMode").forceSetNumber(1);
+  }
+
+  public void turnOnLED() {
+    if(table == null) {
+      setTable();
+    }
+    table.getEntry("ledMode").forceSetNumber(0); // Or use 3 to force turn on.
   }
 }

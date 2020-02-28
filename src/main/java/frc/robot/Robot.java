@@ -81,10 +81,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    limelight.turnOffLED();
   }
 
   @Override
   public void disabledPeriodic() {
+    limelight.turnOffLED();
   }
 
   /**
